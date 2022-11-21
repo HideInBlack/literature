@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>热门推荐</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div style="margin-left: 40px;margin-right: 40px;margin-top: 30px">
+
+    <blockquote class="layui-elem-quote"><i class="layui-icon layui-icon-read" style="font-size: 20px;">&nbsp;</i>我的阅读纪录</blockquote>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+
+        <ul class="layui-timeline">
+
+
+
+            <div id="viewPhotos"></div>
+
+
+
+        </ul>
+
+    </div>
+
+
+
+</div>
+
+<script id="scriptPhotos" type="text/html">
+
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title">Now,继续开启你的阅读之旅吧</div>
+        </div>
+    </li>
+
+    {{#  layui.each(d.photosData, function(index, item){   }}
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis" onclick="deleteRead(
+            {{ item.id }}
+            )"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title"> <span style="font-style: oblique;color: #1E9FFF;font-size: 16px">{{ item.readTime }} </span> 阅读了
+                <span style="font-family: 宋体;color: #1E9FFF;font-size: 21px">
+                     <a href="/reading?workId={{ item.workId }}">
+                    《{{ item.title }}》<br>
+                     </a>
+                </span ><span style="font-family: 楷体">  作者：{{ item.author }}</span><br><br><span style="font-family: 楷体;font-size: 17px">  {{ item.brief }}</span></div>
+        </div>
+    </li>
+
+    {{#  });    }}
+    {{#  if(d.photosData.length === 0){ }}
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title">还没有阅读过任何作品！快开始阅读吧</div>
+        </div>
+    </li>
+    {{#  } }}
+
+    <li class="layui-timeline-item">
+        <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
+        <div class="layui-timeline-content layui-text">
+            <div class="layui-timeline-title">更久前，在你来到这里之前...</div>
+        </div>
+    </li>
+</script>
+
+<script>
+
+    layui.use(['dropdown', 'util', 'layer', 'element', 'jquery', 'laytpl', 'form'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laytpl = layui.laytpl;
+        var util = layui.util;
+
+        //页面请求初始化
+        $.ajax({
+            url: "/readMy",
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                if (res.code == 0) {
+                    var result = res;
+                    var selectData = {
+                        "photosData": res.data
+                    };
+                    var getTpl = scriptPhotos.innerHTML;
+                    var view = document.getElementById('viewPhotos');
+                    laytpl(getTpl).render(selectData, function (html) {
+                        view.innerHTML = html;
+                    });
+                } else {
+                    //layer.msg(res.msg);
+                }
+            }
+        });
+
+        window.deleteRead = function (readId) {
+            layer.confirm('确定要删除条阅读记录吗', function(index) {
+                $.ajax({
+                    url: "/deleteRead?id=" +readId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (res) {
+                        layer.msg(res.msg, {
+                            shade: 0.1,
+                            time: 1000,
+                            offset: '250px'
+                        }, function (index) {
+                            layer.closeAll();
+                            window.location.reload()//页面重加载
+                        });
+                    }
+                });
+
+            });
+        }
+
+
+    });
+
+</script>
+
+</body>
+</html>

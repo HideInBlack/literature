@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.literature.dao.WorkDao">
+
+    <insert id="insertWork" parameterType="com.literature.pojo.Work">
+        insert into literature.lt_work(title, content, author, author_id, type, brief, publish_time, update_time) values
+        (#{title},#{content},#{author},#{authorId},#{type},#{brief},#{publishTime},#{updateTime})
+    </insert>
+
+    <select id="getUserWork" resultType="com.literature.pojo.Work">
+        select * from literature.lt_work where author_id = #{userId} and del = 0
+        <!--<if test='count=="" or count==null'>-->
+        <!--limit #{page},#{limit}-->
+        <!--</if>-->
+    </select>
+
+    <select id="getAllPermit" resultType="com.literature.pojo.Work">
+        select * from literature.lt_work where del = 0 and permission = 0;
+
+    </select>
+
+
+    <select id="getTwo" resultType="com.literature.pojo.Work">
+        select * from literature.lt_work where del = 0 and permission = 1 and id != #{id}
+        and type = #{type} limit 0,2;
+
+    </select>
+
+    <select id="getAllWork" resultType="com.literature.pojo.Work">
+
+        select * from literature.lt_work where del = 0
+
+        <if test="hot!=null and hot !=''">
+           and permission = 1  order by read_count DESC
+            limit 0,8
+        </if>
+
+        <if test="newest!=null and newest !=''">
+            and permission = 1 order by  id  DESC
+            limit 0,8
+        </if>
+
+        <if test="keyWord!='' and keyType=='title' ">
+            and permission = 1 AND  title like  CONCAT( '%',#{keyWord} ,'%') or  author like  CONCAT( '%',#{keyWord} ,'%');
+        </if>
+
+        <if test="keyWord=='' and keyType=='check' ">
+            and permission = 0 ;
+        </if>
+
+
+
+    </select>
+
+    <select id="getOneWork" resultType="com.literature.pojo.Work">
+        select * from literature.lt_work where id = #{workId} and del = 0 ;
+    </select>
+
+    <update id="updateWork" parameterType="com.literature.pojo.Work">
+        <if test="memo!='' and memo=='approve' ">
+            update literature.lt_work set  permission = 1 where id = #{id}
+        </if>
+        <if test="memo!='' and memo=='refuse' ">
+            update literature.lt_work set  permission = 2 where id = #{id}
+        </if>
+        <if test="memo=='' or memo==null">
+            update literature.lt_work set  permission = 0 , title = #{title},author = #{author},brief = #{brief},type = #{type},
+            content = #{content},update_time = #{updateTime} where id = #{id}
+        </if>
+
+    </update>
+
+    <update id="deleteWork" parameterType="com.literature.pojo.Work">
+        update literature.lt_work set  del = 1,update_time = #{updateTime} where id = #{id}
+    </update>
+
+    <update id="addOne" parameterType="int">
+        update literature.lt_work set  read_count = read_count + 1  where id = #{id}
+    </update>
+
+</mapper>

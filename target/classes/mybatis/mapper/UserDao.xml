@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.literature.dao.UserDao">
+
+    <select id="listUser" resultType="com.literature.pojo.User">
+        select id,username,email,create_time,memo,role from literature.lt_user where del = 0 and role = 3;
+    </select>
+
+    <select id="getUserByEmail" resultType="com.literature.pojo.User">
+        select * from literature.lt_user where email = #{email} and password = #{password} and del = 0;
+    </select>
+
+    <select id="getUserById" resultType="com.literature.pojo.User">
+        select * from literature.lt_user where id = #{id} and del = 0 ;
+    </select>
+
+    <insert id="insertUser" parameterType="com.literature.pojo.User">
+        insert into literature.lt_user(username, email, password, create_time) values
+        (#{userName},#{email},#{password},#{createTime})
+    </insert>
+
+    <update id="updateUser" parameterType="com.literature.pojo.User">
+        update literature.lt_user set role = #{role}  where id = #{id}
+    </update>
+
+</mapper>

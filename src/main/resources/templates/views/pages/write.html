@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文学创作</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <script src="../res/wangEditor/wangEditor.min.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left: 40px;margin-right: 40px;margin-top: 30px">
+    <blockquote class="layui-elem-quote"><i class="layui-icon layui-icon-edit" style="font-size: 20px;">&nbsp;</i>开始创作</blockquote>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+<form class="layui-form layui-form-pane" lay-filter="formTest" id="createWork" action="">
+
+    <div style="margin-left: 10px;margin-right: 10px;">
+        <!-- 分成两个部分的栅格系统 -->
+        <div class="layui-row">
+
+            <div class="layui-col-xs6">
+
+                <div class="layui-form-item" pane>
+                    <label class="layui-form-label">标题:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required lay-verify="required" placeholder="请输入作品标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item" pane>
+                    <label class="layui-form-label">作品概述:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="brief" required lay-verify="required" placeholder="请简单介绍此作品..." autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="layui-col-xs6">
+
+                <div class="layui-form-item" pane>
+                    <label class="layui-form-label">笔名:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="author" required lay-verify="required" placeholder="请输入笔名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" pane>
+                    <label class="layui-form-label">所属类型:</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" value="现实" title="现实">
+                        <input type="radio" name="type" value="浪漫" title="浪漫" checked>
+                        <input type="radio" name="type" value="古典" title="古典" >
+                        <input type="radio" name="type" value="现代" title="现代" >
+                        <input type="radio" name="type" value="诗歌" title="诗歌" >
+                        <input type="radio" name="type" value="都市" title="都市" >
+                        <input type="radio" name="type" value="科幻" title="科幻">
+                        <input type="radio" name="type" value="悬疑" title="悬疑" >
+                        <input type="radio" name="type" value="青春" title="青春" >
+                        <input type="radio" name="type" value="其他" title="其他" >
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <br>
+           <div id="editor"></div>
+
+        <br>
+        <center>
+            <button class="layui-btn" type="button" lay-filter="formDemo" onclick="publish()">立即发布</button>
+        </center>
+    </div>
+</form>
+    </div>
+
+</div>
+
+<script>
+
+    const E = window.wangEditor;
+    const editor = new E('#editor');
+
+    editor.config.height = 520;
+    editor.create();
+
+
+    //layui.JavaScript代码区域
+    layui.use(['element', 'form','jquery'], function() {
+        var element = layui.element;
+        var form = layui.form;
+        var $ = layui.jquery;
+        form.render();
+
+        //(获得url中参数的方法)
+        function getParamString(paraPart, name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = paraPart.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+        function getParamFromUrl(name) {
+            var r = getParamString(window.location.search, name);
+            return r;
+        }
+
+        var workId = decodeURI(getParamFromUrl('workId'));
+
+        if (workId != "null"){
+            //对修改页面进行初始化getOneWork
+            $.ajax({
+                url: "/getOneWork?workId=" +workId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (res) {
+                    form.val("formTest", {
+                        "title": res.data.title,
+                        "author": res.data.author,
+                        "brief":res.data.brief,
+                        "type":res.data.type
+                    });
+                    editor.txt.html(res.data.content) ;// 重新设置编辑器内容
+                    form.render();
+                }
+            });
+        }
+
+        //点击发布事件
+        window.publish = function () {
+            var JSONdata = JSON.parse(JSON.stringify($('#createWork').serializeObject()));
+            var content = editor.txt.html();
+            if (JSONdata.author == "" || JSONdata.brief == ""||JSONdata.title == ""||JSONdata.type == ""||content == "" ) {
+                layer.msg("请先完善必需信息！方可提交");
+            } else {
+
+
+                if (workId != "null"){//发修改请求（修改页面）一页多用
+                    $.ajax({
+                        url: "/workUpdate",
+                        type: 'POST',
+                        data: {
+                            "id":workId,
+                            "author": JSONdata.author,
+                            "brief": JSONdata.brief,
+                            "title": JSONdata.title,
+                            "type": JSONdata.type,
+                            "content": content
+                        },
+                        dataType: 'json',
+                        success: function (res) {
+                            layer.closeAll();
+                            layer.msg(res.msg, {
+                                shade: 0.1,
+                                time: 1500,
+                                offset: '250px'
+                            }, function (index) {
+                                layer.closeAll();
+                                window.history.back(-1);//页面重加载-页面返回到上一页
+                            });
+                        }
+                    });
+                }else{//否则就是发添加请求（创作页面）
+                    $.ajax({
+                        url: "/workCreate",
+                        type: 'POST',
+                        data: {
+                            "author": JSONdata.author,
+                            "brief": JSONdata.brief,
+                            "title": JSONdata.title,
+                            "type": JSONdata.type,
+                            "content": content
+                        },
+                        dataType: 'json',
+                        success: function (res) {
+                            layer.closeAll();
+                            layer.msg(res.msg, {
+                                shade: 0.1,
+                                time: 1500,
+                                offset: '250px'
+                            }, function (index) {
+                                layer.closeAll();
+                                window.location.reload()//页面重加载
+                            });
+                        }
+                    });
+                }
+            }
+        };
+
+
+
+
+         //获取到表单的内容
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+    });
+</script>
+
+
+</body>
+</html>

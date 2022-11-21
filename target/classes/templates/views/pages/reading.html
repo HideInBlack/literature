@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>阅读</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <script src="../res/wangEditor/wangEditor.min.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+<div style="margin-left: 40px;margin-right: 40px;margin-top: 30px">
+    <!--<blockquote class="layui-elem-quote"><i class="layui-icon layui-icon-read" style="font-size: 20px;">&nbsp;</i>正在阅读</blockquote>-->
+
+    <button class="layui-btn layui-btn-sm  " style="float: right" onclick="back()">返回</button>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md15">
+                <div class="layui-card">
+                   <center> <div class="layui-card-body" style="height: 40px;" ><br>
+                    <span style="font-family: 楷体;font-size: 30px;" id="title"></span>
+                    </div></center>
+                    <div class="layui-card-header"><span style="float: left;font-family: 楷体;" id="publishTime"></span>
+                        <span style="float: right;font-family: 楷体;" id="author"></span>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="editorLook"></div>
+
+    </div>
+    <button class="layui-btn layui-btn-sm layui-btn-warm " style="float: right" onclick="collect()">收藏</button>
+    <h3 style="font-family: 楷体"><i class="layui-icon  layui-icon-star-fill" style="font-size: 20px;">&nbsp;</i>您可能还感兴趣的有：</h3>
+    <hr class="layui-border-blue">
+
+    <div class="layui-bg-gray" style="padding: 20px;">
+        <div class="layui-row layui-col-space15">
+
+                <div id="viewPhotos"></div>
+
+
+        </div>
+    </div>
+
+
+
+</div>
+
+    <script id="scriptPhotos" type="text/html">
+
+
+        {{#  layui.each(d.photosData, function(index, item){   }}
+        <div class="layui-col-md6" >
+        <a href="/reading?workId={{ item.id }}">
+            <div class="layui-panel" style="height: 270px">
+                <div style="padding: 30px 30px;">
+                    <div class="layui-col-md4">
+                        <div class="layui-card">
+                            <img src="/images/OIP.jpg" style="width: 93% ;height: 190px;margin-top: 11px">
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-card">
+                            <div class="layui-card-header"><span style="font-size: 20px;font-family: 楷体">《{{ item.title }}》</span></div>
+                            <div class="layui-card-body" style="height: 150px">
+                                作者:{{ item.author }}<br>
+
+                                {{ item.brief }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        </div>
+        {{#  });    }}
+        {{#  if(d.photosData.length === 0){ }}
+        <p>并没有找到适合你的推荐！</p>
+        {{#  } }}
+
+
+    </script>
+
+<script>
+
+     var F = window.wangEditor;
+     var editor = new F('#editorLook');
+
+     editor.config.height = 570;
+     // 配置菜单栏，删减菜单，调整顺序
+     editor.config.menus = [];
+     // 配置颜色（文字颜色、背景色）
+     editor.config.colors = [
+         '#000000',
+         '#eeece0',
+         '#1c487f',
+         '#4d80bf'
+     ];
+     editor.create();
+     editor.$textElem.attr('contenteditable', false); // 禁用编辑功能
+
+     editor.txt.html('<p>用 JS 设置的内容</p>') // 重新设置编辑器内容
+
+
+
+    //layui.JavaScript代码区域
+     layui.use(['dropdown', 'util', 'layer', 'element', 'jquery', 'laytpl', 'form'], function () {
+         var element = layui.element;
+         var layer = layui.layer;
+         var $ = layui.jquery;
+         var form = layui.form;
+         var laytpl = layui.laytpl;
+
+        //(获得url中参数的方法)
+        function getParamString(paraPart, name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = paraPart.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+        function getParamFromUrl(name) {
+            var r = getParamString(window.location.search, name);
+            return r;
+        }
+
+        var workId = decodeURI(getParamFromUrl('workId'));
+        if (workId != "null"){
+            //对阅读页面进行初始化getOneWork
+            $.ajax({
+                url: "/getOneWork?workId=" +workId,
+                type: 'GET',
+                dataType: 'json',
+                success: function (res) {
+
+                    document.getElementById("title").innerText = res.data.title;
+                    document.getElementById("publishTime").innerText = "于 "+res.data.publishTime + " 发布";
+                    document.getElementById("author").innerText ="作者：" +  res.data.author + " 作品类型：" + res.data.type;
+                    editor.txt.html(res.data.content) ;// 重新设置编辑器内容
+
+                    //智能推荐请求初始化
+                    $.ajax({
+                        url: "/workTwo",
+                        type: 'POST',
+                        data: {
+                            "workId": workId,
+                            "type": res.data.type
+                        },
+                        success: function (resd) {
+                            if (resd.code == 0) {
+                                var result = resd;
+                                var selectData = {
+                                    "photosData": resd.data
+                                };
+                                var getTpl = scriptPhotos.innerHTML;
+                                var view = document.getElementById('viewPhotos');
+                                laytpl(getTpl).render(selectData, function (html) {
+                                    view.innerHTML = html;
+                                });
+                            } else {
+                                //layer.msg(res.msg);
+                            }
+                        }
+                    });
+                }
+            });
+
+
+
+        }
+
+        window.back = function(){
+            window.history.back(-1);
+        };
+         window.collect = function(){
+             $.ajax({
+                 url: "/addCollect?workId=" +workId,
+                 type: 'GET',
+                 dataType: 'json',
+                 success: function (res) {
+                     layer.msg(res.msg, {
+                         shade: 0.1,
+                         time: 1000,
+                         offset: '250px'
+                     }, function (index) {
+                         layer.closeAll();
+                     });
+                 }
+             });
+         };
+
+        //监听提交
+        form.on('submit(formDemo)', function(data) {
+            layer.msg(data);
+        });
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>审核作品发布</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div style="margin-left: 40px;margin-right: 40px;margin-top: 30px">
+
+    <blockquote class="layui-elem-quote"><i class="layui-icon layui-icon-survey" style="font-size: 20px;">&nbsp;</i>审核作品发布</blockquote>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+
+        <table class="layui-hide" id="LAY_table_user" lay-filter="demo"></table>
+
+    </div>
+
+
+
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn  layui-btn-xs" lay-event="detail">审核</a>
+    <a class="layui-btn  layui-btn-xs layui-btn-normal" lay-event="editor">批准</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">驳回</a>
+</script>
+
+<script>
+
+    //layui.JavaScript代码区域
+    layui.use(['element', 'form', 'table', 'layer'], function() {
+        var element = layui.element;
+        var table = layui.table;
+        var form = layui.form;
+        var $ = layui.$;
+        var layer = layui.layer;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+
+
+        //方法级渲染
+        table.render({
+            elem: '#LAY_table_user',
+            url: '/workListCheck',
+            cols: [[
+                {
+                    field: 'id',
+                    title: 'ID',
+                    width: 100,
+                    sort: true,
+                    fixed: true
+                }, {
+                    field: 'title',
+                    title: '标题',
+                    align: 'center'
+                }, {
+                    field: 'author',
+                    title: '作者',
+                    align: 'center'
+                },{
+                    field: 'type',
+                    title: '类型',
+                    width: 80,
+                    align: 'center'
+                }, {
+                    field: 'permission',
+                    title: '状态',
+                    width: 80,
+                    align: 'center',templet: function(d){
+                        if(d.permission == 0){
+                            return "<span style=\"color: #1E9FFF;\">待审核</span>";
+                        }else if(d.permission == 1){
+                            return "已批准";
+                        }else{
+                            return "<span style=\"color: #c00;\">被驳回</span>";
+                        }
+                    }
+                },{
+                    field: 'publishTime',
+                    title: '上传时间',
+                    align: 'center'
+                }, {
+                    fixed: 'right',
+                    title: '数据操作',
+                    align: 'center',
+                    toolbar: '#barDemo'
+                }
+            ]
+            ],
+            id: 'testReload',
+            page: true,
+            parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                var result;
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                }
+                else {
+                    result = res.data.slice(0, this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            },
+
+            height: 475
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function(obj) {
+            var data = obj.data;
+            console.log(data);
+            if (obj.event === 'detail') {
+
+                layer.msg("即将至阅读作品页面...");
+                function jumpUrl() {
+                    window.location.href = 'reading?workId='+data.id ;
+                }
+                setTimeout(jumpUrl, 1600);
+
+
+            } else if (obj.event === 'editor') {
+
+                layer.confirm('审核通过此部文学作品？', function(index) {
+                    $.ajax({
+                        url: "/workUpdate?id=" +data.id +"&memo=approve",
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (res) {
+                            layer.msg(res.msg, {
+                                shade: 0.1,
+                                time: 1000,
+                                offset: '250px'
+                            }, function (index) {
+                                layer.closeAll();
+                                window.location.reload()//页面重加载
+                            });
+
+                        }
+                    });
+                    layer.close(index);
+                });
+
+            }else if (obj.event === 'del') {
+                layer.confirm('确定要驳回此部文学作品吗', function(index) {
+                    $.ajax({
+                        url: "/workUpdate?id=" +data.id +"&memo=refuse",
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (res) {
+                            layer.msg(res.msg, {
+                                shade: 0.1,
+                                time: 1000,
+                                offset: '250px'
+                            }, function (index) {
+                                layer.closeAll();
+                                window.location.reload()//页面重加载
+                            });
+
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+
+
+    });
+</script>
+
+
+</body>
+</html>

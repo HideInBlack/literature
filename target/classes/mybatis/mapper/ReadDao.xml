@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.literature.dao.ReadDao">
+
+
+    <select id="listRead" resultType="com.literature.pojo.Read">
+          select   lt_read.*,lt_work.title,lt_work.author,lt_work.type,lt_work.brief
+          from literature.lt_read ,literature.lt_work where user_id =#{userId}
+          and lt_read.del = 0  and work_id = lt_work.id ORDER BY read_time DESC
+    </select>
+
+    <select id="getOneRead" resultType="int">
+        select count(*)  from literature.lt_read where work_id = #{workId} and user_id = #{userId} and del = 0 ;
+    </select>
+
+    <insert id="insertRead" parameterType="com.literature.pojo.Read">
+        insert into literature.lt_read(user_id, work_id, read_time) values
+        (#{userId},#{workId},#{readTime})
+    </insert>
+
+
+    <update id="updateRead" parameterType="com.literature.pojo.Read">
+        update literature.lt_read set  read_time = #{readTime} where work_id = #{workId} and user_id = #{userId} and del = 0
+    </update>
+
+    <update id="deleteRead" parameterType="com.literature.pojo.Read">
+        update literature.lt_read set  del =1  where id = #{id}
+    </update>
+
+</mapper>

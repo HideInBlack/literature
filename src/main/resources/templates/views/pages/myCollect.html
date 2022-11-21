@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的收藏</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+<div style="margin-left: 40px;margin-right: 40px;margin-top: 30px">
+
+    <blockquote class="layui-elem-quote"><i class="layui-icon layui-icon-star" style="font-size: 20px;">&nbsp;</i>收藏夹</blockquote>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+
+        <div class="layui-row layui-col-space15">
+
+            <div id="viewPhotos"></div>
+
+        </div>
+
+    </div>
+
+
+</div>
+<script id="scriptPhotos" type="text/html">
+
+    {{#  layui.each(d.photosData, function(index, item){   }}
+    <a href="/reading?workId={{ item.workId }}">
+    <div class="layui-col-md3">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <center><img src="/images/OIP.jpg" style="width: 93% ;height: 200px;margin-top: 11px"></center>
+            </div>
+            <div class="layui-card-header"><span style="font-size: 15px;font-family: 楷体">《{{ item.title }}》 作者：{{ item.author }}</span></div>
+            <div class="layui-card-header" style="font-size: 10px;font-family: 楷体">于{{ item.collectTime }} 收藏
+                <div class="layui-btn-group" style="float: right">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="deleteCollect({{ item.id }})"><i class="layui-icon">&#xe640;</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </a>
+
+    {{#  });    }}
+    {{#  if(d.photosData.length === 0){ }}
+    <span style="font-size: 15px;font-family: 楷体">还没有收藏过任何作品！</span>
+    {{#  } }}
+
+
+</script>
+
+<script>
+
+    layui.use(['dropdown', 'util', 'layer', 'element', 'jquery', 'laytpl', 'form'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laytpl = layui.laytpl;
+        var util = layui.util;
+
+        //页面请求初始化
+        $.ajax({
+            url: "/getMyCollect",
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                if (res.code == 0) {
+                    var result = res;
+                    var selectData = {
+                        "photosData": res.data
+                    };
+                    var getTpl = scriptPhotos.innerHTML;
+                    var view = document.getElementById('viewPhotos');
+                    laytpl(getTpl).render(selectData, function (html) {
+                        view.innerHTML = html;
+                    });
+                } else {
+                    //layer.msg(res.msg);
+                }
+            }
+        });
+
+        window.deleteCollect = function (id) {
+            layer.confirm('要把此作品移除收藏夹吗', function(index) {
+                $.ajax({
+                    url: "/deleteCollect?id=" +id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (res) {
+                        layer.msg(res.msg, {
+                            shade: 0.1,
+                            time: 1000,
+                            offset: '250px'
+                        }, function (index) {
+                            layer.closeAll();
+                            window.location.reload()//页面重加载
+                        });
+                    }
+                });
+
+            });
+        }
+
+
+    });
+
+</script>
+
+</body>
+</html>

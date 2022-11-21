@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>文学海洋</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" >
+    <div class="layui-header" style="background-color: #009688">
+        <div class="layui-logo" style="color: #FBFBFB;font-family: 楷体;font-size: 20px;"><img
+                src="/images/文.png"
+                class="layui-nav-img" style="width: 45px;height: 45px;">文学海洋
+        </div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item" id="hot"><a href="javascript:;" onclick="setClick('hot')">
+                <i class="layui-icon layui-icon-fire" style="font-size: 20px;">&nbsp;</i>热门书籍</a></li>
+            <li class="layui-nav-item" id="newest"><a href="javascript:;" onclick="setClick('newest')">
+                <i class="layui-icon layui-icon-release" style="font-size: 20px;">&nbsp;</i>最新推荐</a></li>
+            <!--<li class="layui-nav-item"><a href="">nav 3</a></li>-->
+
+            <div class="demoTable" style="display: inline;" id="search">
+                &nbsp;&nbsp;
+                <div class="layui-inline"  >
+                    <input class="layui-input" name="id" id="demoReload" autocomplete="off" style="height: 32px" placeholder="输入作品名/作者搜索">
+                </div>
+                <button class="layui-btn layui-btn-normal"  style="height: 32px" onclick="search()">
+                    <i class="layui-icon layui-icon-search" style="font-size: 18px"></i></button>
+
+            </div>
+
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="/images/head.jpg" class="layui-nav-img">
+                    <span id="headName">文学小巨匠</span>
+                </a>
+
+            </li>
+            <li class="layui-nav-item"><a href="/userLogout">退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black"  >
+        <div class="layui-side-scroll" >
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test" >
+                <li class="layui-nav-item" id="write" ><a href="javascript:;" onclick="setClick('write')">
+                    <i class="layui-icon layui-icon-edit" style="font-size: 20px;">&nbsp;</i>开始创作</a></li>
+                <li class="layui-nav-item" id="myWork"><a href="javascript:;" onclick="setClick('myWork')">
+                    <i class="layui-icon layui-icon-list" style="font-size: 20px;">&nbsp;</i>我的作品</a></li>
+                <li class="layui-nav-item" id="myRead"><a href="javascript:;" onclick="setClick('myRead')">
+                    <i class="layui-icon layui-icon-read" style="font-size: 20px;">&nbsp;</i>我的阅读</a></li>
+
+                <!--admin目录-->
+                <!--<li class="layui-nav-item"><a href="javascript:;">授权身份</a></li>-->
+                <li class="layui-nav-item" id="checkWork"><a href="javascript:;" onclick="setClick('checkWork')">
+                    <i class="layui-icon layui-icon-survey" style="font-size: 20px;">&nbsp;</i>审核作品发布</a></li>
+                <li class="layui-nav-item" id="manageUser"><a href="javascript:;" onclick="setClick('manageUser')">
+                    <i class="layui-icon layui-icon-username" style="font-size: 20px;">&nbsp;</i>用户权限授权</a></li>
+                <li class="layui-nav-item" id="manageWork"><a href="javascript:;" onclick="setClick('manageWork')">
+                    <i class="layui-icon layui-icon-template-1" style="font-size: 20px;">&nbsp;</i>用户作品管理</a></li>
+
+                <li class="layui-nav-item" id="myCollect"><a href="javascript:;" onclick="setClick('myCollect')">
+                    <i class="layui-icon layui-icon-star" style="font-size: 20px;">&nbsp;</i>收藏夹</a></li>
+
+                <!--读者目录-->
+                <li class="layui-nav-item" id="applyFor"><a href="javascript:;" id="hrefId" onclick="applyFor()">
+                    <i class="layui-icon layui-icon-service" style="font-size: 20px;">&nbsp;</i><span style="color: #01AAED" id="apply">点击申请创作权限</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body" >
+        <iframe id="body" src="hot" allowtransparency="true" frameborder="no" border="0" onload="changeFrameHeight()"
+                style="width: 87%;position: fixed;top: 60px;overflow:hidden;"></iframe>
+    </div>
+
+</div>
+
+<script th:inline="javascript">
+    //用thymeleaf取到msg信息
+    var data = [[${msg}]];
+
+    //layer弹出层
+    layui.use('layer', function () { //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        if (data != null) {//没有信息时
+            //配置一个透明的询问框
+            layer.msg(data, {
+                time: 2000, //2s后自动关闭
+            });
+        }
+        
+
+    });
+</script>
+<script>
+    //页面跳转;
+    function setClick(target) {
+        document.getElementById("body").src = target;
+    }
+    //自适应高度 iframe
+    function changeFrameHeight() {
+        var ifm = document.getElementById("body");
+        ifm.height = document.documentElement.clientHeight - 60;
+    }
+    window.onresize = function () {
+        changeFrameHeight();
+    };
+
+    //layui.JavaScript代码区域
+    layui.use(['dropdown', 'util', 'layer', 'element', 'jquery', 'laytpl', 'form'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        window.applyFor = function () {
+            layer.confirm('申请了写作权限便可创作，确定要申请写作权限吗？', function(index) {
+                $.ajax({
+                    url: "/updateUser?role=3",
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (res) {
+                        layer.msg(res.msg, {
+                            shade: 0.1,
+                            time: 1000,
+                            offset: '250px'
+                        }, function (index) {
+                            layer.closeAll();
+                            window.location.reload()//页面重加载
+                        });
+                    }
+                });
+
+            });
+        };
+
+        //获取身份role
+        $.ajax({
+            url: "/getRole",
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+
+
+                if (res.data.userRole == 0) {//admin管理员权限
+                    document.getElementById("body").src = "checkWork";
+                    document.getElementById("headName").innerText = res.data.userName + "(管理员权限)";
+                    document.getElementById("write").setAttribute("style","display: none");
+                    document.getElementById("myWork").setAttribute("style","display: none");
+                    document.getElementById("myRead").setAttribute("style","display: none");
+                    document.getElementById("hot").setAttribute("style","display: none");
+                    document.getElementById("newest").setAttribute("style","display: none");
+                    document.getElementById("search").setAttribute("style","display: none");
+                    document.getElementById("applyFor").setAttribute("style","display: none");
+                }else if(res.data.userRole == 1){//作者权限
+                    document.getElementById("headName").innerText = res.data.userName + "(作者权限)";
+                    document.getElementById("applyFor").setAttribute("style","display: none");
+                    document.getElementById("manageUser").setAttribute("style","display: none");
+                    document.getElementById("manageWork").setAttribute("style","display: none");
+                    document.getElementById("checkWork").setAttribute("style","display: none");
+                }else if(res.data.userRole == 2){//读者权限
+                    document.getElementById("headName").innerText = res.data.userName + "(读者权限)";
+                    document.getElementById("write").setAttribute("style","display: none");
+                    document.getElementById("myWork").setAttribute("style","display: none");
+                    document.getElementById("manageUser").setAttribute("style","display: none");
+                    document.getElementById("manageWork").setAttribute("style","display: none");
+                    document.getElementById("checkWork").setAttribute("style","display: none");
+                }else if(res.data.userRole == 3){
+                    document.getElementById("apply").innerHTML = '<span style="color: #FF5722" id="apply">已申请耐心等待</span>';
+                    document.getElementById("hrefId").setAttribute("onclick","");
+                    document.getElementById("headName").innerText = res.data.userName + "(读者权限)";
+                    document.getElementById("write").setAttribute("style","display: none");
+                    document.getElementById("myWork").setAttribute("style","display: none");
+                    document.getElementById("manageUser").setAttribute("style","display: none");
+                    document.getElementById("manageWork").setAttribute("style","display: none");
+                    document.getElementById("checkWork").setAttribute("style","display: none");
+                }
+            }
+        });
+
+
+        //注册搜索事件
+        window.search = function () {
+            document.getElementById("body").src = 'search?keyWord='+ document.getElementById("demoReload").value;
+        }
+    });
+</script>
+</body>
+</html>

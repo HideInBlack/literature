@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>最新推荐</title>
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <script src="../res/layui/layui.js"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+
+
+<div style="margin-left: 40px;margin-right: 40px;margin-top: 30px">
+
+    <blockquote class="layui-elem-quote" > <i class="layui-icon layui-icon-release" style="font-size: 20px;">&nbsp;</i>最新作品推荐</blockquote>
+
+    <div class="layui-bg-gray" style="padding: 30px;">
+        <div class="layui-row layui-col-space15">
+
+            <div id="viewPhotos"></div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script id="scriptPhotos" type="text/html">
+
+
+    {{#  layui.each(d.photosData, function(index, item){   }}
+    <a href="/reading?workId={{ item.id }}">
+    <div class="layui-col-md3">
+        <div class="layui-card" style="margin: 10px">
+            <div class="layui-card-body">
+                <center><img src="/images/古书.jpg" style="width: 93% ;height: 240px;margin-top: 11px"></center>
+            </div>
+            <div class="layui-card-body" style="height: 60px">{{ item.brief }}</div>
+            <center> <div class="layui-card-header"><span style="font-size: 20px;font-family: 楷体">《{{ item.title }}》</span></div></center>
+            <div class="layui-card-header"><span style="font-size: 12px;font-family: 楷体;">作者:{{ item.author }}</span>
+                <span style="font-size: 9px;font-family: 楷体;float: right">{{ item.publishTime }}发布</span></div>
+        </div>
+    </div>
+    </a>
+    {{#  });    }}
+    {{#  if(d.photosData.length === 0){ }}
+    <p>还没有任何作品！</p>
+    {{#  } }}
+
+
+</script>
+
+<script>
+
+    layui.use(['dropdown', 'util', 'layer', 'element', 'jquery', 'laytpl', 'form'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laytpl = layui.laytpl;
+        var util = layui.util;
+
+        //页面请求初始化
+        $.ajax({
+            url: "/workListNew",
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                if (res.code == 0) {
+                    var result = res;
+                    var selectData = {
+                        "photosData": res.data
+                    };
+                    var getTpl = scriptPhotos.innerHTML;
+                    var view = document.getElementById('viewPhotos');
+                    laytpl(getTpl).render(selectData, function (html) {
+                        view.innerHTML = html;
+                    });
+                } else {
+                    //layer.msg(res.msg);
+                }
+            }
+        });
+
+    });
+
+
+
+</script>
+</body>
+</html>

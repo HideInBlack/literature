@@ -1,0 +1,78 @@
+2022-11-22 00:01:55.981 DEBUG 3020 --- [http-nio-9090-exec-9] com.literature.dao.UserDao.insertUser    : ==>  Preparing: insert into literature.lt_user(username, email, password, create_time) values (?,?,?,?) 
+2022-11-22 00:01:56.190 DEBUG 3020 --- [http-nio-9090-exec-9] com.literature.dao.UserDao.insertUser    : ==> Parameters: Настасья(String), 3227881331@qq.com(String), feier418010QF(String), 2022-11-22 00:01:55(String)
+2022-11-22 00:01:56.298 DEBUG 3020 --- [http-nio-9090-exec-9] com.literature.dao.UserDao.insertUser    : <==    Updates: 1
+2022-11-22 00:02:56.375  WARN 3020 --- [http-nio-9090-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.bind.MissingServletRequestParameterException: Required request parameter 'TwoPassword' for method parameter type String is not present]
+2022-11-22 00:03:38.749 DEBUG 3020 --- [http-nio-9090-exec-8] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:03:38.752 DEBUG 3020 --- [http-nio-9090-exec-8] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: qinfei(String), 20010814(String)
+2022-11-22 00:03:38.757 DEBUG 3020 --- [http-nio-9090-exec-8] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 1
+2022-11-22 00:03:55.343 DEBUG 3020 --- [http-nio-9090-exec-7] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:03:55.344 DEBUG 3020 --- [http-nio-9090-exec-7] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: qinfei(String), 20010815(String)
+2022-11-22 00:03:55.349 DEBUG 3020 --- [http-nio-9090-exec-7] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 0
+2022-11-22 00:04:25.083 DEBUG 3020 --- [http-nio-9090-exec-2] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:04:25.084 DEBUG 3020 --- [http-nio-9090-exec-2] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: admin(String), 123(String)
+2022-11-22 00:04:25.088 DEBUG 3020 --- [http-nio-9090-exec-2] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 0
+2022-11-22 00:04:48.477 DEBUG 3020 --- [http-nio-9090-exec-8] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:04:48.479 DEBUG 3020 --- [http-nio-9090-exec-8] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: admin(String), admin(String)
+2022-11-22 00:04:48.482 DEBUG 3020 --- [http-nio-9090-exec-8] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 0
+2022-11-22 00:05:01.537 DEBUG 3020 --- [http-nio-9090-exec-6] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:05:01.538 DEBUG 3020 --- [http-nio-9090-exec-6] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: qinfei(String), 20010814(String)
+2022-11-22 00:05:01.545 DEBUG 3020 --- [http-nio-9090-exec-6] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 1
+2022-11-22 00:05:14.089 DEBUG 3020 --- [http-nio-9090-exec-7] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:05:14.090 DEBUG 3020 --- [http-nio-9090-exec-7] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: admin(String), 123456(String)
+2022-11-22 00:05:14.095 DEBUG 3020 --- [http-nio-9090-exec-7] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 1
+2022-11-22 00:17:17.625 DEBUG 3020 --- [http-nio-9090-exec-3] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:17:17.628 DEBUG 3020 --- [http-nio-9090-exec-3] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: qinfei(String), 20010814(String)
+2022-11-22 00:17:17.634 DEBUG 3020 --- [http-nio-9090-exec-3] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 1
+2022-11-22 00:25:11.092  INFO 3020 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-11-22 00:25:11.093  INFO 3020 --- [SpringContextShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2022-11-22 00:25:11.204  INFO 3020 --- [SpringContextShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed
+2022-11-22 00:26:34.858  INFO 17952 --- [restartedMain] com.literature.LiteratureApplication     : Starting LiteratureApplication using Java 1.8.0_161 on LAPTOP-EFLL195K with PID 17952 (F:\idealwork\zero\literature\target\classes started by 董 in F:\idealwork\zero\literature)
+2022-11-22 00:26:34.864 DEBUG 17952 --- [restartedMain] com.literature.LiteratureApplication     : Running with Spring Boot v2.4.5, Spring v5.3.6
+2022-11-22 00:26:34.866  INFO 17952 --- [restartedMain] com.literature.LiteratureApplication     : No active profile set, falling back to default profiles: default
+2022-11-22 00:26:34.920  INFO 17952 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-11-22 00:26:34.920  INFO 17952 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-11-22 00:26:37.994  INFO 17952 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2022-11-22 00:26:38.035  INFO 17952 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-11-22 00:26:38.036  INFO 17952 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.45]
+2022-11-22 00:26:38.044  INFO 17952 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.23] using APR version [1.7.0].
+2022-11-22 00:26:38.044  INFO 17952 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2022-11-22 00:26:38.044  INFO 17952 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2022-11-22 00:26:38.085  INFO 17952 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1c  28 May 2019]
+2022-11-22 00:26:38.449  INFO 17952 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-11-22 00:26:38.450  INFO 17952 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3529 ms
+2022-11-22 00:26:41.607  INFO 17952 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3cb76a0a, org.springframework.security.web.context.SecurityContextPersistenceFilter@605879a5, org.springframework.security.web.header.HeaderWriterFilter@6ad66b8d, org.springframework.security.web.authentication.logout.LogoutFilter@69166b94, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@66b589e4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@600b8f40, org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter@5262bc31, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1ec85a7, org.springframework.security.web.session.SessionManagementFilter@268208b0, org.springframework.security.web.access.ExceptionTranslationFilter@6dda744a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7bce17e5]
+2022-11-22 00:26:41.698  INFO 17952 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2022-11-22 00:26:41.909  INFO 17952 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-11-22 00:26:41.964  INFO 17952 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2022-11-22 00:26:41.974  INFO 17952 --- [restartedMain] com.literature.LiteratureApplication     : Started LiteratureApplication in 7.817 seconds (JVM running for 9.923)
+2022-11-22 00:26:45.516  INFO 17952 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-11-22 00:26:45.516  INFO 17952 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2022-11-22 00:26:45.517  INFO 17952 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2022-11-22 00:26:47.010  INFO 17952 --- [http-nio-9090-exec-7] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} inited
+2022-11-22 00:26:47.032 DEBUG 17952 --- [http-nio-9090-exec-7] com.literature.dao.WorkDao.getAllWork    : ==>  Preparing: select * from literature.lt_work where del = 0 and permission = 1 order by read_count DESC limit 0,8 
+2022-11-22 00:26:47.179 DEBUG 17952 --- [http-nio-9090-exec-7] com.literature.dao.WorkDao.getAllWork    : ==> Parameters: 
+2022-11-22 00:26:47.257 DEBUG 17952 --- [http-nio-9090-exec-7] com.literature.dao.WorkDao.getAllWork    : <==      Total: 8
+2022-11-22 00:27:00.746 DEBUG 17952 --- [http-nio-9090-exec-5] c.literature.dao.UserDao.getUserByEmail  : ==>  Preparing: select * from literature.lt_user where email = ? and password = ? and del = 0; 
+2022-11-22 00:27:00.750 DEBUG 17952 --- [http-nio-9090-exec-5] c.literature.dao.UserDao.getUserByEmail  : ==> Parameters: admin(String), 123456(String)
+2022-11-22 00:27:00.835 DEBUG 17952 --- [http-nio-9090-exec-5] c.literature.dao.UserDao.getUserByEmail  : <==      Total: 1
+2022-11-22 00:27:01.398 DEBUG 17952 --- [http-nio-9090-exec-5] com.literature.dao.WorkDao.getAllWork    : ==>  Preparing: select * from literature.lt_work where del = 0 and permission = 0 ; 
+2022-11-22 00:27:01.399 DEBUG 17952 --- [http-nio-9090-exec-5] com.literature.dao.WorkDao.getAllWork    : ==> Parameters: 
+2022-11-22 00:27:01.402 DEBUG 17952 --- [http-nio-9090-exec-5] com.literature.dao.WorkDao.getAllWork    : <==      Total: 1
+2022-11-22 00:27:03.333 DEBUG 17952 --- [http-nio-9090-exec-1] com.literature.dao.WorkDao.getAllWork    : ==>  Preparing: select * from literature.lt_work where del = 0 and permission = 0 ; 
+2022-11-22 00:27:03.333 DEBUG 17952 --- [http-nio-9090-exec-1] com.literature.dao.WorkDao.getAllWork    : ==> Parameters: 
+2022-11-22 00:27:03.336 DEBUG 17952 --- [http-nio-9090-exec-1] com.literature.dao.WorkDao.getAllWork    : <==      Total: 1
+2022-11-22 00:27:04.174 DEBUG 17952 --- [http-nio-9090-exec-9] com.literature.dao.UserDao.listUser      : ==>  Preparing: select id,username,email,create_time,memo,role from literature.lt_user where del = 0 and role = 3; 
+2022-11-22 00:27:04.180 DEBUG 17952 --- [http-nio-9090-exec-9] com.literature.dao.UserDao.listUser      : ==> Parameters: 
+2022-11-22 00:27:04.183 DEBUG 17952 --- [http-nio-9090-exec-9] com.literature.dao.UserDao.listUser      : <==      Total: 0
+2022-11-22 00:27:04.979 DEBUG 17952 --- [http-nio-9090-exec-8] com.literature.dao.WorkDao.getAllWork    : ==>  Preparing: select * from literature.lt_work where del = 0 
+2022-11-22 00:27:04.980 DEBUG 17952 --- [http-nio-9090-exec-8] com.literature.dao.WorkDao.getAllWork    : ==> Parameters: 
+2022-11-22 00:27:04.997 DEBUG 17952 --- [http-nio-9090-exec-8] com.literature.dao.WorkDao.getAllWork    : <==      Total: 9
+2022-11-22 00:27:05.686 DEBUG 17952 --- [http-nio-9090-exec-4] c.literature.dao.CollectDao.listCollect  : ==>  Preparing: select lt_collect.*,lt_work.title,lt_work.author,lt_work.type,lt_work.brief from literature.lt_collect ,literature.lt_work where user_id =? and lt_collect.del = 0 and work_id = lt_work.id ORDER BY collect_time DESC 
+2022-11-22 00:27:05.697 DEBUG 17952 --- [http-nio-9090-exec-4] c.literature.dao.CollectDao.listCollect  : ==> Parameters: 5(Integer)
+2022-11-22 00:27:05.722 DEBUG 17952 --- [http-nio-9090-exec-4] c.literature.dao.CollectDao.listCollect  : <==      Total: 0
+2022-11-22 00:27:06.901 DEBUG 17952 --- [http-nio-9090-exec-5] com.literature.dao.WorkDao.getAllWork    : ==>  Preparing: select * from literature.lt_work where del = 0 and permission = 0 ; 
+2022-11-22 00:27:06.901 DEBUG 17952 --- [http-nio-9090-exec-5] com.literature.dao.WorkDao.getAllWork    : ==> Parameters: 
+2022-11-22 00:27:06.904 DEBUG 17952 --- [http-nio-9090-exec-5] com.literature.dao.WorkDao.getAllWork    : <==      Total: 1
+2022-11-22 00:27:54.327  INFO 17952 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2022-11-22 00:27:54.328  INFO 17952 --- [SpringContextShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closing ...
+2022-11-22 00:27:54.350  INFO 17952 --- [SpringContextShutdownHook] com.alibaba.druid.pool.DruidDataSource   : {dataSource-1} closed

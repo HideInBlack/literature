@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.literature.dao.CollectDao">
+
+
+    <select id="listCollect" resultType="com.literature.pojo.Collect">
+          select   lt_collect.*,lt_work.title,lt_work.author,lt_work.type,lt_work.brief
+          from literature.lt_collect ,literature.lt_work where user_id =#{userId}
+          and lt_collect.del = 0  and work_id = lt_work.id ORDER BY collect_time DESC
+    </select>
+
+    <select id="checkCollect" resultType="int">
+        select count(*)  from literature.lt_collect where work_id = #{workId} and user_id = #{userId} and del = 0 ;
+    </select>
+
+    <insert id="insertCollect" parameterType="com.literature.pojo.Collect">
+        insert into literature.lt_collect(user_id, work_id, collect_time) values
+        (#{userId},#{workId},#{collectTime})
+    </insert>
+
+    <update id="deleteCollect" parameterType="com.literature.pojo.Read">
+        update literature.lt_collect set  del =1  where id = #{id}
+    </update>
+
+</mapper>
