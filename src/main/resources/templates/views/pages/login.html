@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>咚空间</title>
-<meta name="description" content="咚空间" />
-<meta name="keywords" content="咚空间" />
+<title>文学海洋</title>
+<meta name="description" content="文学海洋" />
+<meta name="keywords" content="文学海洋" />
 <meta name="author" content="js代码" />
 <meta name="Copyright" content="js代码" />
 <link rel="stylesheet" th:href="@{login/css/style.css}">
@@ -19,14 +19,14 @@
       <div class="cont_info_log_sign_up">
         <div class="col_md_login">
           <div class="cont_ba_opcitiy" style="margin-left: 31px">
-            <h2 style="font-family: 华文行楷" >登录</h2>
+            <h2 >登录</h2>
             <p>已有账号，直接登录！</p>
             <button class="btn_login" onclick="cambiar_login()">登录</button>
           </div>
         </div>
         <div class="col_md_sign_up">
           <div class="cont_ba_opcitiy" style="margin-left: 31px">
-            <h2 style="font-family: 华文行楷">注册</h2>
+            <h2 >注册</h2>
             <p>还没有账号？免费注册！</p>
             <button class="btn_sign_up" onclick="cambiar_sign_up()">注册</button>
           </div>
@@ -40,7 +40,7 @@
 
         <form id="loginForm" action="/userToLogin" method="post" >
         <div class="cont_form_login"> <a href="#" onclick="ocultar_login_sign_up()" >X</a>
-          <h2 style="font-family: 华文行楷">董政宇个人空间</h2>
+          <h2 >登录</h2>
           <input type="text" placeholder="邮箱" name="email"/>
           <input type="password" placeholder="密码" name="password"/>
           <button class="btn_login" type="submit" >登录</button>
@@ -49,7 +49,7 @@
 
         <form id="registerForm" action="/userRegister" method="post">
         <div class="cont_form_sign_up"> <a href="#" onclick="ocultar_login_sign_up()">X</a>
-          <h2 style="font-family: 华文行楷">欢迎来到"咚空间"，开启你的启程</h2>
+          <h2 >欢迎来到"文学海洋"</h2>
           <input type="text" placeholder="用户名" name="userName"/>
           <input type="text" placeholder="邮箱" name="email"/>
           <input type="password" placeholder="密码" name="password"/>
@@ -73,12 +73,9 @@
         var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
 
         if (data == null) {//没有信息时
-            // layer.msg('欢迎来到文学海洋论坛！希望你在此<br>畅游无阻', {
-            //     time: 2000 //2s后自动关闭
-            // });
-          layer.msg('秦菲同学，欢迎来到“咚空间”！希望你能 你能 你能<br>尽快破解：）', {
-            time: 5500 //2s后自动关闭
-          });
+            layer.msg('欢迎来到文学海洋论坛！希望你在此<br>畅游无阻', {
+                time: 2000 //2s后自动关闭
+            });
         } else {
             //配置一个透明的询问框
             layer.msg(data, {
